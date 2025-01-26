@@ -79,7 +79,6 @@ curl http://$(terraform output -raw Webserver-Public-IP)
 
 - `name_of_s3_bucket`: S3 bucket name for state storage
 - `dynamo_db_table_name`: DynamoDB table name for state locking
-- `iam_user_name`: IAM user name for Terraform operations
 
 #### Infrastructure (`infrastructure/variables.tf`)
 
