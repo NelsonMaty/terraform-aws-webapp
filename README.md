@@ -2,6 +2,22 @@
 
 This project provides an automated way to deploy a web server infrastructure on AWS using Terraform, with a separate bootstrap process for managing Terraform state.
 
+## Table of Contents
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Setup Instructions](#setup-instructions)
+  - [1. Bootstrap State Backend](#1-bootstrap-state-backend)
+  - [2. Deploy Infrastructure](#2-deploy-infrastructure)
+- [Configuration](#configuration)
+  - [Bootstrap Configuration](#bootstrap-configuration)
+  - [Infrastructure Configuration](#infrastructure-configuration)
+- [Usage Guide](#usage-guide)
+  - [Modifying Infrastructure](#modifying-infrastructure)
+  - [Destroying Infrastructure](#destroying-infrastructure)
+  - [Verifying Bootstrap Resources](#verifying-bootstrap-resources)
+  - [Verifying Infrastructure](#verifying-infrastructure)
+- [Security Notes](#security-notes)
+
 ## Project Structure
 
 The project is organized into two main components:
