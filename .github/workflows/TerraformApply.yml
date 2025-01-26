@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'infrastructure/**'
-      - 'astro-site/**'
   workflow_dispatch:
 
 jobs:
