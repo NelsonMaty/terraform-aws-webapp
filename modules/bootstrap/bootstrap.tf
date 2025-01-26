@@ -6,12 +6,13 @@
 resource "aws_s3_bucket" "state_bucket" {
   bucket = var.name_of_s3_bucket
 
-  # Tells AWS to encrypt the S3 bucket at rest by default
+  # Enable server-side encryption by default
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
         sse_algorithm = "AES256"
       }
+      bucket_key_enabled = true
     }
   }
 
