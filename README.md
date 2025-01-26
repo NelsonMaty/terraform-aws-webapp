@@ -104,6 +104,24 @@ aws s3 ls | grep nelson-rios.mundose22
 aws dynamodb list-tables | grep terraformstatelock
 ```
 
+### Verifying Infrastructure
+
+After running `terraform apply` in the infrastructure directory, verify the deployment:
+
+```bash
+# Check if the VPC exists
+aws ec2 describe-vpcs --filters "Name=tag:Name,Values=terraform-vpc"
+
+# Check if the EC2 instance is running
+aws ec2 describe-instances --filters "Name=tag:Name,Values=webserver" "Name=instance-state-name,Values=running"
+
+# Get the webserver's public IP
+terraform output Webserver-Public-IP
+
+# Test if the web server is responding
+curl http://$(terraform output -raw Webserver-Public-IP)
+```
+
 ## Security Notes
 
 - The bootstrap process creates a dedicated IAM user with minimal required permissions
