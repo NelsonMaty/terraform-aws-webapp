@@ -16,18 +16,18 @@ nvm use 20
 # Install pnpm
 npm install -g pnpm
 
-# Clone the project
+# Clone the project and copy astro-site
 git clone https://github.com/NelsonMaty/terraform-aws-webapp.git /tmp/project
 cd /tmp/project/astro-site
 
 # Install dependencies with pnpm
 pnpm install
 
-# Remove example analytics
+# Remove example analytics (as mentioned in docs)
 sed -i '/umami/d' src/layouts/Layout.astro
 
-# Build the site in production mode
-NODE_ENV=production pnpm run build
+# Build the site with pnpm
+pnpm run build
 
 # Deploy to Apache
 sudo rm -rf /var/www/html/*
