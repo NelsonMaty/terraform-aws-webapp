@@ -64,13 +64,13 @@ resource "aws_subnet" "subnet" {
   cidr_block        = var.subnet_cidr
 }
 
-#Create SG for allowing TCP/80 & TCP/22
+#Create SG for allowing TCP/80
 resource "aws_security_group" "sg" {
   name        = "sg"
-  description = "Allow TCP/80 & TCP/22"
+  description = "Allow TCP/80 for inbound and all traffic for outbound"
   vpc_id      = aws_vpc.vpc.id
   ingress {
-    description = "allow traffic from TCP/80"
+    description = "Allow inbound HTTP traffic"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
