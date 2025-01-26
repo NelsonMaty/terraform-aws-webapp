@@ -138,6 +138,26 @@ terraform output Webserver-Public-IP
 curl http://$(terraform output -raw Webserver-Public-IP)
 ```
 
+## GitHub Actions Workflows
+
+This project includes GitHub Actions workflows for automated infrastructure management:
+
+### Terraform Apply Workflow
+Automatically triggered on push to main branch or manual trigger:
+- Initializes Terraform
+- Validates configuration
+- Applies infrastructure changes
+
+### Terraform Destroy Workflow
+Manually triggered workflow to tear down infrastructure:
+- Initializes Terraform
+- Destroys all resources
+
+Note: Requires the following GitHub Secrets:
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- AWS_REGION
+
 ## Security Notes
 
 - The bootstrap process creates a dedicated IAM user with minimal required permissions
