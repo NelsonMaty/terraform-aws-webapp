@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0"
+    }
   }
 }
 
@@ -64,11 +68,12 @@ resource "aws_subnet" "subnet" {
   cidr_block        = var.subnet_cidr
 }
 
-#Create SG for allowing TCP/80
+#Create SG for allowing TCP/80 & SSH
 resource "aws_security_group" "sg" {
   name        = "sg"
-  description = "Allow TCP/80 for inbound and all traffic for outbound"
+  description = "Allow HTTP and SSH inbound traffic"
   vpc_id      = aws_vpc.vpc.id
+  
   ingress {
     description = "Allow inbound HTTP traffic"
     from_port   = 80
@@ -76,6 +81,15 @@ resource "aws_security_group" "sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  ingress {
+    description = "Allow inbound SSH traffic"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # In production, you should restrict this to your IP
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
