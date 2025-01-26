@@ -13,8 +13,8 @@ export NVM_DIR="$HOME/.nvm"
 nvm install 20
 nvm use 20
 
-# Clone your project (replace with your actual repo URL)
-git clone https://github.com/your-username/your-repo.git /tmp/project
+# Clone your project
+git clone https://github.com/NelsonMaty/terraform-aws-webapp.git /tmp/project
 cd /tmp/project/astro-site
 
 # Install dependencies and build
