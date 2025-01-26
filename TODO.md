@@ -17,8 +17,8 @@ This checklist outlines the required tasks to complete the MundosE DevOps techni
 
 ## 3. State Management Setup
 
-- [ ] Configure S3 bucket and DynamoDB table for state management in bootstrap folder
-- [ ] Set up VPC networking and EC2 instance resources in infrastructure folder
+- [x] Configure S3 bucket and DynamoDB table for state management in bootstrap folder
+- [x] Set up VPC networking and EC2 instance resources in infrastructure folder
 
 ## 4. GitHub Actions Setup
 
@@ -30,8 +30,8 @@ This checklist outlines the required tasks to complete the MundosE DevOps techni
 
 - [ ] Test the complete deployment process
 - [ ] Test the destroy process
-- [ ] Verify Apache installation
-- [ ] Verify access to the website
+- [x] Verify Apache installation
+- [x] Verify access to the website
 
 ## 6. Documentation
 
@@ -44,7 +44,7 @@ This checklist outlines the required tasks to complete the MundosE DevOps techni
 
 ## 7. Improvements
 
-- [ ] Add variables for customization (instance type, region, etc.)
-- [ ] Add outputs for important resource information
-- [ ] Add tags for better resource management
+- [x] Add variables for customization (instance type, region, etc.)
+- [x] Add outputs for important resource information
+- [x] Add tags for better resource management
 - [ ] Add a simple website content to demonstrate Apache working
