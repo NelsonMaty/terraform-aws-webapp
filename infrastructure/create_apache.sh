@@ -6,25 +6,28 @@ sudo systemctl enable httpd --now
 # Install git
 sudo yum install -y git
 
-# Install Node.js and npm
+# Install Node.js and pnpm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm install 20
 nvm use 20
 
+# Install pnpm
+npm install -g pnpm
+
 # Clone the project and copy astro-site
 git clone https://github.com/NelsonMaty/terraform-aws-webapp.git /tmp/project
 cd /tmp/project/astro-site
 
-# Install dependencies
-npm install
+# Install dependencies with pnpm
+pnpm install
 
 # Remove example analytics (as mentioned in docs)
 sed -i '/umami/d' src/layouts/Layout.astro
 
-# Build the site
-npm run build
+# Build the site with pnpm
+pnpm run build
 
 # Deploy to Apache
 sudo rm -rf /var/www/html/*
