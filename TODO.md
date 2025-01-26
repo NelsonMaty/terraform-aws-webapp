@@ -4,23 +4,21 @@ This checklist outlines the required tasks to complete the MundosE DevOps techni
 
 ## 1. Basic Setup Fixes
 
-- [ ] Update Terraform version in TerraformApply.yml from 0.12.15 to a recent version (like 1.5.x)
-- [ ] Add missing SSH key configuration in main.tf (currently commented out)
-- [ ] Fix typo in TerraformDestroy.yml (-auto-approved should be -auto-approve)
-- [ ] Add proper variable declarations and values (currently using hardcoded values)
+- [x] Update Terraform version in TerraformApply.yml from 0.12.15 to a recent version (like 1.5.x)
+- [x] Update or remove SSH key configuration in main.tf (currently commented out)
+- [x] Fix typo in TerraformDestroy.yml (-auto-approved should be -auto-approve)
+- [x] Add proper variable declarations and values (currently using hardcoded values)
 
 ## 2. Bootstrap Configuration
 
-- [ ] Create a terraform.tfvars file to define values for the bootstrap variables
-- [ ] Complete the bootstrap module implementation (currently has undefined variables)
-- [ ] Create a bash script for setting things up
-- [ ] Document the bootstrap process in README.md
+- [x] Complete the bootstrap module implementation (currently has undefined variables)
+- [x] Separate the infrastracture terraform files into its own folder
+- [x] Document the bootstrap process and state management in README.md
 
 ## 3. State Management Setup
 
-- [ ] Create the S3 bucket "mundose22" mentioned in backend.tf
-- [ ] Create the DynamoDB table "terraformstatelock"
-- [ ] Document the state management setup process
+- [ ] Configure S3 bucket and DynamoDB table for state management in bootstrap folder
+- [ ] Set up VPC networking and EC2 instance resources in infrastructure folder
 
 ## 4. GitHub Actions Setup
 
