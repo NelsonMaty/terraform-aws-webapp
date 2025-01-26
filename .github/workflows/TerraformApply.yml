@@ -1,15 +1,15 @@
-name: Terraform Apply
+name: Terraform Destroy and Apply
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'infrastructure/**'  # Triggers on infrastructure file changes
-  workflow_dispatch:  # Allows manual workflow runs
+      - 'infrastructure/**'
+  workflow_dispatch:
 
 jobs:
-  terraform_apply:
+  terraform_destroy_and_apply:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -40,6 +40,13 @@ jobs:
     - name: Terraform validation
       run: terraform validate
 
+    - name: Terraform destroy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+      continue-on-error: true
+      run: terraform destroy -auto-approve -input=false
 
     - name: Terraform apply
       env:
