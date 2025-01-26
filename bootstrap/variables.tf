@@ -16,14 +16,3 @@ variable "dynamo_db_table_name" {
   default     = "terraformstatelock"
 }
 
-variable "iam_user_name" {
-  description = "Name of IAM user for Terraform"
-  type        = string
-  default     = "terraform-admin"
-}
-
-variable "iam_policy_name" {
-  description = "Name of IAM policy for Terraform permissions"
-  type        = string
-  default     = "terraform-admin-policy"
-}
