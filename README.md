@@ -1,22 +1,22 @@
 # AWS Infrastructure as Code with Terraform
 
 ## Table of Contents
-
 - [Introduction](#introduction)
-- [Usage Guide for Developers](#usage-guide-for-developers)
-- [Setup Guide for DevOps](#setup-guide-for-devops)
+- [Setup Guide](#setup-guide)
+  - [Bootstrap State Backend](#1-bootstrap-state-backend)
+  - [Verify Resources](#2-verify-resources)
+  - [Configuration Variables](#configuration-variables)
 - [Project Structure](#project-structure)
 
 ## Introduction
 
-This project automates the deployment of a web server infrastructure on AWS using Terraform. It includes a bootstrap process for managing Terraform state and the main infrastructure deployment for a web server setup with Apache and Astro.js.
+This project automates the deployment of a web server infrastructure on AWS using Terraform. It includes a bootstrap process for managing Terraform state and the main infrastructure deployment for a basic Apache web server.
 
 Key features:
-
 - Automated infrastructure deployment
 - State management with S3 and DynamoDB
 - GitHub Actions integration
-- Apache web server with Astro.js frontend
+- Basic Apache web server
 
 ## Setup Guide
 
@@ -79,7 +79,6 @@ curl http://$(terraform output -raw Webserver-Public-IP)
 ## Project Structure
 
 ### Infrastructure Components
-
 - `bootstrap/`
   - `main.tf`: Creates S3 bucket and DynamoDB table for state management
   - `variables.tf`: Bootstrap configuration variables
@@ -88,11 +87,10 @@ curl http://$(terraform output -raw Webserver-Public-IP)
   - `backend.tf`: Configures Terraform backend
   - `main.tf`: EC2 instance configuration
   - `setup.tf`: VPC and networking setup
-  - `create_apache.sh`: Apache and Astro.js installation script
+  - `setup_apache.sh`: Apache installation script
   - `variables.tf`: Infrastructure variables
 
 ### CI/CD
-
 - `.github/workflows/`
   - `TerraformApply.yml`: Automated deployment workflow
   - `TerraformDestroy.yml`: Infrastructure teardown workflow
