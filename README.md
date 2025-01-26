@@ -1,46 +1,52 @@
 # AWS Infrastructure as Code with Terraform
 
-This project provides an automated way to deploy a web server infrastructure on AWS using Terraform, with a separate bootstrap process for managing Terraform state.
-
 ## Table of Contents
+- [Introduction](#introduction)
+- [Usage Guide for Developers](#usage-guide-for-developers)
+- [Setup Guide for DevOps](#setup-guide-for-devops)
 - [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Setup Instructions](#setup-instructions)
-  - [1. Bootstrap State Backend](#1-bootstrap-state-backend)
-  - [2. Deploy Infrastructure](#2-deploy-infrastructure)
-- [Configuration](#configuration)
-  - [Bootstrap Configuration](#bootstrap-configuration)
-  - [Infrastructure Configuration](#infrastructure-configuration)
-- [Usage Guide](#usage-guide)
-  - [Modifying Infrastructure](#modifying-infrastructure)
-  - [Destroying Infrastructure](#destroying-infrastructure)
-  - [Verifying Bootstrap Resources](#verifying-bootstrap-resources)
-  - [Verifying Infrastructure](#verifying-infrastructure)
-- [Security Notes](#security-notes)
 
-## Project Structure
+## Introduction
 
-The project is organized into two main components:
-- `bootstrap/`: Creates and manages the Terraform state backend (S3 bucket and DynamoDB table)
-- `infrastructure/`: Deploys the web server and networking components
+This project automates the deployment of a web server infrastructure on AWS using Terraform. It includes a bootstrap process for managing Terraform state and the main infrastructure deployment for a web server setup with Apache and Astro.js.
 
-## Prerequisites
+Key features:
+- Automated infrastructure deployment
+- State management with S3 and DynamoDB
+- GitHub Actions integration
+- Apache web server with Astro.js frontend
 
-- Terraform ~> 1.10.0
+## Usage Guide for Developers
+
+### Prerequisites
 - AWS CLI configured with appropriate credentials
-- AWS IAM permissions for:
-  - S3 bucket creation and management
-  - DynamoDB table creation and management
-  - VPC and networking resources
-  - EC2 instance management
-  - IAM user and policy management
+- Terraform ~> 1.10.0
 
-## Setup Instructions
+### Quick Start
+```bash
+# Deploy infrastructure
+cd infrastructure
+terraform init
+terraform plan
+terraform apply
+
+# Get web server IP
+terraform output Webserver-Public-IP
+```
+
+### GitHub Actions
+The repository includes two workflows:
+- **TerraformApply**: Automatically deploys infrastructure on push to main branch
+- **TerraformDestroy**: Manually triggered workflow to tear down infrastructure
+
+Required GitHub Secrets:
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- AWS_REGION
+
+## Setup Guide for DevOps
 
 ### 1. Bootstrap State Backend
-
-First, set up the Terraform state backend:
-
 ```bash
 cd bootstrap
 terraform init
@@ -53,113 +59,64 @@ This creates:
 - DynamoDB table for state locking
 - IAM user with required permissions
 
-### 2. Deploy Infrastructure
+### 2. Verify Resources
 
-After bootstrap is complete:
-
+#### Bootstrap Verification
 ```bash
-cd ../infrastructure
-terraform init
-terraform plan
-terraform apply
+# Verify S3 bucket
+aws s3 ls | grep nelson-rios.mundose22
+
+# Verify DynamoDB table
+aws dynamodb list-tables | grep terraformstatelock
 ```
 
-This deploys:
-- VPC with internet gateway
-- Public subnet
-- Security group (allows HTTP traffic)
-- EC2 instance running Apache web server
+#### Infrastructure Verification
+```bash
+# Verify VPC
+aws ec2 describe-vpcs --filters "Name=tag:Name,Values=terraform-vpc"
 
-## Configuration
+# Verify EC2 instance
+aws ec2 describe-instances --filters "Name=tag:Name,Values=webserver" "Name=instance-state-name,Values=running"
 
-### Bootstrap Configuration
-Key variables in `bootstrap/variables.tf`:
-- `name_of_s3_bucket`: Name of S3 bucket for state storage
-- `dynamo_db_table_name`: Name of DynamoDB table for state locking
-- `iam_user_name`: Name of IAM user for Terraform operations
+# Test web server
+curl http://$(terraform output -raw Webserver-Public-IP)
+```
 
-### Infrastructure Configuration
-Key variables in `infrastructure/variables.tf`:
+### Configuration Variables
+
+#### Bootstrap (`bootstrap/variables.tf`)
+- `name_of_s3_bucket`: S3 bucket name for state storage
+- `dynamo_db_table_name`: DynamoDB table name for state locking
+- `iam_user_name`: IAM user name for Terraform operations
+
+#### Infrastructure (`infrastructure/variables.tf`)
 - `aws_region`: AWS region for deployment
 - `vpc_cidr`: CIDR block for VPC
 - `subnet_cidr`: CIDR block for subnet
 - `instance_type`: EC2 instance type
-- `ami_id`: AMI ID for the web server
+- `ami_id`: AMI ID for web server
 
-## Usage Guide
+## Project Structure
 
-### Modifying Infrastructure
+### Infrastructure Components
+- `bootstrap/`
+  - `main.tf`: Creates S3 bucket and DynamoDB table for state management
+  - `variables.tf`: Bootstrap configuration variables
 
-1. Update variables in respective `variables.tf` files
-2. Run `terraform plan` to review changes
-3. Apply changes with `terraform apply`
+- `infrastructure/`
+  - `backend.tf`: Configures Terraform backend
+  - `main.tf`: EC2 instance configuration
+  - `setup.tf`: VPC and networking setup
+  - `create_apache.sh`: Apache and Astro.js installation script
+  - `variables.tf`: Infrastructure variables
 
-### Destroying Infrastructure
+### CI/CD
+- `.github/workflows/`
+  - `TerraformApply.yml`: Automated deployment workflow
+  - `TerraformDestroy.yml`: Infrastructure teardown workflow
 
-To tear down the infrastructure:
-
-```bash
-cd infrastructure
-terraform destroy
-
-cd ../bootstrap
-terraform destroy
-```
-
-Note: The S3 bucket has `prevent_destroy = true` set as a safety mechanism.
-
-### Verifying Bootstrap Resources
-
-After running `terraform apply` in the bootstrap directory, verify the resources were created:
-
-```bash
-# Verify S3 bucket creation
-aws s3 ls | grep nelson-rios.mundose22
-
-# Verify DynamoDB table creation
-aws dynamodb list-tables | grep terraformstatelock
-```
-
-### Verifying Infrastructure
-
-After running `terraform apply` in the infrastructure directory, verify the deployment:
-
-```bash
-# Check if the VPC exists
-aws ec2 describe-vpcs --filters "Name=tag:Name,Values=terraform-vpc"
-
-# Check if the EC2 instance is running
-aws ec2 describe-instances --filters "Name=tag:Name,Values=webserver" "Name=instance-state-name,Values=running"
-
-# Get the webserver's public IP
-terraform output Webserver-Public-IP
-
-# Test if the web server is responding
-curl http://$(terraform output -raw Webserver-Public-IP)
-```
-
-## GitHub Actions Workflows
-
-This project includes GitHub Actions workflows for automated infrastructure management:
-
-### Terraform Apply Workflow
-Automatically triggered on push to main branch or manual trigger:
-- Initializes Terraform
-- Validates configuration
-- Applies infrastructure changes
-
-### Terraform Destroy Workflow
-Manually triggered workflow to tear down infrastructure:
-- Initializes Terraform
-- Destroys all resources
-
-Note: Requires the following GitHub Secrets:
-- AWS_ACCESS_KEY_ID
-- AWS_SECRET_ACCESS_KEY
-- AWS_REGION
-
-## Security Notes
-
-- The bootstrap process creates a dedicated IAM user with minimal required permissions
-- The web server only accepts HTTP traffic (port 80)
-- All resources are tagged for better resource management
+### Security Notes
+- Bootstrap creates minimal-permission IAM user
+- Web server accepts only HTTP traffic (port 80)
+- All resources are tagged for management
+- S3 bucket has deletion protection enabled
