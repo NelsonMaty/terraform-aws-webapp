@@ -92,6 +92,18 @@ terraform destroy
 
 Note: The S3 bucket has `prevent_destroy = true` set as a safety mechanism.
 
+### Verifying Bootstrap Resources
+
+After running `terraform apply` in the bootstrap directory, verify the resources were created:
+
+```bash
+# Verify S3 bucket creation
+aws s3 ls | grep nelson-rios.mundose22
+
+# Verify DynamoDB table creation
+aws dynamodb list-tables | grep terraformstatelock
+```
+
 ## Security Notes
 
 - The bootstrap process creates a dedicated IAM user with minimal required permissions
