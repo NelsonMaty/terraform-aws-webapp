@@ -13,12 +13,17 @@ export NVM_DIR="$HOME/.nvm"
 nvm install 20
 nvm use 20
 
-# Clone your project
+# Clone the project and copy astro-site
 git clone https://github.com/NelsonMaty/terraform-aws-webapp.git /tmp/project
 cd /tmp/project/astro-site
 
-# Install dependencies and build
+# Install dependencies
 npm install
+
+# Remove example analytics (as mentioned in docs)
+sed -i '/umami/d' src/layouts/Layout.astro
+
+# Build the site
 npm run build
 
 # Deploy to Apache
