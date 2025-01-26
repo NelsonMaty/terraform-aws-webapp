@@ -30,12 +30,25 @@ terraform apply
 ```
 
 This creates:
-
 - S3 bucket for state storage
 - DynamoDB table for state locking
-- IAM user with required permissions
 
-### 2. Verify Resources
+### 2. Infrastructure Deployment
+
+The infrastructure is automatically deployed through GitHub Actions. On every push to the main branch that includes changes to the `infrastructure/` directory, the workflow will:
+1. Initialize Terraform
+2. Validate the configuration
+3. Apply the changes
+
+For manual deployment:
+```bash
+cd infrastructure
+terraform init
+terraform plan
+terraform apply
+```
+
+### 3. Verify Resources
 
 #### Bootstrap Verification
 

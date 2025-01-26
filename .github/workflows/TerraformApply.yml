@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'infrastructure/**'
-  workflow_dispatch:
+      - 'infrastructure/**'  # Triggers on infrastructure file changes
+  workflow_dispatch:  # Allows manual workflow runs
 
 jobs:
   terraform_apply:
