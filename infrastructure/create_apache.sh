@@ -3,6 +3,9 @@ sudo yum update -y
 sudo yum install -y httpd.x86_64
 sudo systemctl enable httpd --now
 
+# Install git
+sudo yum install -y git
+
 # Install Node.js and npm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
@@ -10,29 +13,12 @@ export NVM_DIR="$HOME/.nvm"
 nvm install 20
 nvm use 20
 
-# Create Astro project
-npm create astro@latest /tmp/astro-site -- --template minimal --install --no-git --typescript strict
-cd /tmp/astro-site
+# Clone your project (replace with your actual repo URL)
+git clone https://github.com/your-username/your-repo.git /tmp/project
+cd /tmp/project/astro-site
 
-# Modify the index page
-cat > src/pages/index.astro << 'EOL'
----
----
-
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>Welcome to AWS!</title>
-	</head>
-	<body>
-		<h1>Hello from AWS!</h1>
-		<p>This is a simple Astro site running on Apache.</p>
-	</body>
-</html>
-EOL
-
-# Build the site
+# Install dependencies and build
+npm install
 npm run build
 
 # Deploy to Apache
