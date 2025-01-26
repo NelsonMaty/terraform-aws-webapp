@@ -23,8 +23,7 @@ This checklist outlines the required tasks to complete the MundosE DevOps techni
 ## 4. GitHub Actions Setup
 
 - [ ] Configure AWS credentials in GitHub repository secrets
-- [ ] Add proper branch protection rules
-- [ ] Consider adding a plan step before apply
+- [x] Complete GitHub Actions workflow steps using /infrastructure as working directory
 
 ## 5. Testing
 
